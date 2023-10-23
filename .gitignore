@@ -36,7 +36,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # secret
-./src/common/envs
-./src/common/envs/development.env
-./src/common/envs/production.env
-./uploadedFiles
+/src/common/envs
+/src/common/envs/development.env
+/src/common/envs/production.env
+/uploadedFiles
