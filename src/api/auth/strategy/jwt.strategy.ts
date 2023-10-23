@@ -1,21 +1,30 @@
 import { Strategy, ExtractJwt } from "passport-jwt";
 
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 
 import { UsersService } from "../../users/users.service";
 import { JwtRefreshTokenStrategy } from "./jwt-refresh-token.strategy";
 import { JwtPayload } from "../jwt-payload.interface";
+import { ConfigService } from "@nestjs/config";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   private readonly logger = new Logger(JwtRefreshTokenStrategy.name);
 
-  constructor(private readonly usersService: UsersService) {
+  constructor(
+    @Inject(UsersService) private readonly usersService: UsersService,
+    @Inject(ConfigService) private configService: ConfigService,
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET || "secret",
+      secretOrKey: configService.get("JWT_SECRET"),
     });
     this.logger.warn("JwtStrategy initialized");
   }
